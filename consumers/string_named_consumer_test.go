@@ -6,6 +6,7 @@ import (
 )
 
 type stringNamedConsumerTestCase struct {
+	consumerArgName   string
 	args              []string
 	expectedConsumed  []string
 	expectedRemainder []string
@@ -13,26 +14,37 @@ type stringNamedConsumerTestCase struct {
 
 var stringNamedConsumerTestCaseSuit = []stringNamedConsumerTestCase{
 	{
-		args:              []string{"--named-arg1", "value1", "--named-arg2", "value2", "arg1"},
-		expectedConsumed:  []string{"--named-arg1", "value1"},
-		expectedRemainder: []string{"--named-arg2", "value2", "arg1"},
+		consumerArgName:   "kw1",
+		args:              []string{"--kw1", "val1", "--kw2", "val2", "pos1"},
+		expectedConsumed:  []string{"val1"},
+		expectedRemainder: []string{"--kw2", "val2", "pos1"},
 	},
 	{
-		args:              []string{"arg1", "arg2"},
+		consumerArgName:   "pos1",
+		args:              []string{"pos1", "pos2"},
 		expectedConsumed:  []string{},
-		expectedRemainder: []string{"arg1", "arg2"},
+		expectedRemainder: []string{"pos1", "pos2"},
 	},
 	{
-		args:              []string{"arg1", "arg2", "--named-arg1", "--named-arg2"},
+		consumerArgName:   "kw1",
+		args:              []string{"pos1", "pos2", "--kw1", "val1"},
 		expectedConsumed:  []string{},
-		expectedRemainder: []string{"arg1", "arg2", "--named-arg1", "--named-arg2"},
+		expectedRemainder: []string{"pos1", "pos2", "--kw1", "val1"},
 	},
 	{
-		args:              []string{"--named-arg1", "--named-arg2"},
+		consumerArgName:   "kw1",
+		args:              []string{"--kw1", "--kw2"},
+		expectedConsumed:  []string{"--kw2"},
+		expectedRemainder: []string{},
+	},
+	{
+		consumerArgName:   "kw2",
+		args:              []string{"--kw1", "--kw2"},
 		expectedConsumed:  []string{},
-		expectedRemainder: []string{"--named-arg1", "--named-arg2"},
+		expectedRemainder: []string{"--kw1", "--kw2"},
 	},
 	{
+		consumerArgName:   "pos1",
 		args:              []string{},
 		expectedConsumed:  []string{},
 		expectedRemainder: []string{},
@@ -41,7 +53,7 @@ var stringNamedConsumerTestCaseSuit = []stringNamedConsumerTestCase{
 
 func TestStringNamedConsumer_Consume(t *testing.T) {
 	for _, testCase := range stringNamedConsumerTestCaseSuit {
-		consumer := PositionalConsumer{}
+		consumer := StringNamedConsumer{testCase.consumerArgName}
 		args := testCase.args
 		expectedConsumed := testCase.expectedConsumed
 		expectedRemainder := testCase.expectedRemainder

@@ -1,19 +1,23 @@
 package consumers
 
+import (
+	"github.com/trpx/minarg/constants"
+)
+
 type StringNamedConsumer struct {
+	argName string
 }
 
 func (c *StringNamedConsumer) Consume(args []string) (consumed []string, remainder []string) {
 	if len(args) < 2 {
 		return consumed, args
 	}
-	args = args[:2]
-	prefix1 := args[0][:2]
-	prefix2 := args[1][:1]
-	thirdChar := args[0][2:3]
 
-	if prefix1 == "--" && thirdChar != "-" && prefix2 != "-" {
-		consumed = args[:2]
+	arg := args[0]
+	value := args[1]
+
+	if arg == constants.PREFIX+c.argName {
+		consumed = append(consumed, value)
 		remainder = args[2:]
 	} else {
 		remainder = args

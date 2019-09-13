@@ -1,12 +1,18 @@
 package parsers
 
+import (
+	"github.com/trpx/minarg/errors"
+)
+
 type Parser interface {
+	parse(value string) (err error)
 }
 
 type StringParser struct {
 }
 
-func (p *StringParser) parse(args []string) (value string, err error) {
-	value = args[1]
-	return value, nil
+func (p *StringParser) parse(arg string) (result *string, err errors.ParseError) {
+	result = &arg
+	err = nil
+	return result, err
 }

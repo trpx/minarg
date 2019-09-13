@@ -5,31 +5,31 @@ import (
 	"testing"
 )
 
-type stringParserTestCase struct {
+type intParserTestCase struct {
 	value             string
-	expectedResult    string
+	expectedResult    int
 	expectedErrorCode int
 }
 
-var stringParserTestCaseSuit = []stringParserTestCase{
+var intParserTestCaseSuit = []intParserTestCase{
 	{
-		value:          "val",
-		expectedResult: "val",
+		value:          "123",
+		expectedResult: 123,
 	},
 	{
-		value:          "",
-		expectedResult: "",
+		value:             "val",
+		expectedErrorCode: errors.TYPE_ERR,
 	},
 }
 
-func TestStringParser(t *testing.T) {
-	for _, testCase := range stringParserTestCaseSuit {
-		parser := StringParser{}
+func TestIntParser(t *testing.T) {
+	for _, testCase := range intParserTestCaseSuit {
+		parser := IntParser{}
 		value := testCase.value
 		expectedResult := testCase.expectedResult
 		expectedErrorCode := testCase.expectedErrorCode
 
-		var result *string
+		var result *int
 		var err errors.ParseError
 
 		result, err = parser.parse(value)
@@ -60,14 +60,14 @@ func TestStringParser(t *testing.T) {
 		if result != nil {
 			if *result != expectedResult {
 				t.Errorf(
-					"Expected '%s', got '%s' as a result of parsing value %#v",
+					"Expected %d, got %d as a result of parsing value %#v",
 					expectedResult, *result, value,
 				)
 			}
 		} else {
 			t.Errorf(
 				"Test implementation error, result is nil, but shouldn't"+
-					" ever be here, value: %#v, expected result: '%s'.",
+					" ever be here, value: %#v, expected result: %d.",
 				value, expectedResult,
 			)
 		}

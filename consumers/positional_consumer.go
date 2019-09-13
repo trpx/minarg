@@ -1,5 +1,8 @@
 package consumers
 
+// The purpose of consumer is to pop all arguments it can
+// from the left hand side of os.Args and return them and remainder
+// for further usage by other parts of the library
 type Consumer interface {
 	Consume()
 }
