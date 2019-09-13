@@ -1,6 +1,7 @@
 package consumers
 
 import (
+	"github.com/trpx/minarg/utils"
 	"testing"
 )
 
@@ -12,8 +13,23 @@ type TestCase struct {
 
 var testCaseSuit = []TestCase{
 	{
-		args:              []string{"some-dir", "some-other-dir"},
-		expectedConsumed:  []string{"some-dir", "some-other-dir"},
+		args:              []string{"arg1", "arg2"},
+		expectedConsumed:  []string{"arg1", "arg2"},
+		expectedRemainder: []string{},
+	},
+	{
+		args:              []string{"arg1", "arg2", "--named-arg1", "--named-arg2"},
+		expectedConsumed:  []string{"arg1", "arg2"},
+		expectedRemainder: []string{"--named-arg1", "--named-arg2"},
+	},
+	{
+		args:              []string{"--named-arg1", "--named-arg2"},
+		expectedConsumed:  []string{},
+		expectedRemainder: []string{"--named-arg1", "--named-arg2"},
+	},
+	{
+		args:              []string{},
+		expectedConsumed:  []string{},
 		expectedRemainder: []string{},
 	},
 }
@@ -27,30 +43,18 @@ func TestPositionalConsumer_Consume(t *testing.T) {
 
 		consumed, remainder := consumer.Consume(args)
 
-		if !stringArraysEqual(expectedConsumed, consumed) {
+		if !utils.StringArraysEqual(expectedConsumed, consumed) {
 			t.Errorf(
 				"Expected consumed %#v, got %#v when consuming args %#v",
 				expectedConsumed, consumed, args,
 			)
 		}
 
-		if !stringArraysEqual(expectedRemainder, remainder) {
+		if !utils.StringArraysEqual(expectedRemainder, remainder) {
 			t.Errorf(
 				"Expected remainder %#v, got %#v when consuming args %#v",
 				expectedRemainder, remainder, args,
 			)
 		}
 	}
-}
-
-func stringArraysEqual(a []string, b []string) bool {
-	if len(a) != len(b) {
-		return false
-	}
-	for idx, el := range a {
-		if el != b[idx] {
-			return false
-		}
-	}
-	return true
 }
