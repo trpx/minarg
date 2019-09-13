@@ -8,14 +8,16 @@ type PositionalConsumer struct {
 }
 
 func (c *PositionalConsumer) Consume(args []string) (consumed []string, remainder []string) {
-	for idx, arg := range args {
-		firstChar := arg[:1]
-		if firstChar != "-" {
-			consumed = append(consumed, arg)
-		} else {
-			remainder = args[idx:]
-			break
-		}
+	if len(args) < 1 {
+		return consumed, args
+	}
+	arg := args[0]
+	firstChar := arg[:1]
+	if firstChar != "-" {
+		consumed = append(consumed, arg)
+		remainder = args[1:]
+	} else {
+		remainder = args
 	}
 	return consumed, remainder
 }

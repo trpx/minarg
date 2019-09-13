@@ -5,22 +5,27 @@ import (
 	"testing"
 )
 
-type positionalConsumerTestCase struct {
+type stringNamedConsumerTestCase struct {
 	args              []string
 	expectedConsumed  []string
 	expectedRemainder []string
 }
 
-var positionalConsumerTestCaseSuit = []positionalConsumerTestCase{
+var stringNamedConsumerTestCaseSuit = []stringNamedConsumerTestCase{
+	{
+		args:              []string{"--named-arg1", "value1", "--named-arg2", "value2", "arg1"},
+		expectedConsumed:  []string{"--named-arg1", "value1"},
+		expectedRemainder: []string{"--named-arg2", "value2", "arg1"},
+	},
 	{
 		args:              []string{"arg1", "arg2"},
-		expectedConsumed:  []string{"arg1"},
-		expectedRemainder: []string{"arg2"},
+		expectedConsumed:  []string{},
+		expectedRemainder: []string{"arg1", "arg2"},
 	},
 	{
 		args:              []string{"arg1", "arg2", "--named-arg1", "--named-arg2"},
-		expectedConsumed:  []string{"arg1"},
-		expectedRemainder: []string{"arg2", "--named-arg1", "--named-arg2"},
+		expectedConsumed:  []string{},
+		expectedRemainder: []string{"arg1", "arg2", "--named-arg1", "--named-arg2"},
 	},
 	{
 		args:              []string{"--named-arg1", "--named-arg2"},
@@ -34,8 +39,8 @@ var positionalConsumerTestCaseSuit = []positionalConsumerTestCase{
 	},
 }
 
-func TestPositionalConsumer_Consume(t *testing.T) {
-	for _, testCase := range positionalConsumerTestCaseSuit {
+func TestStringNamedConsumer_Consume(t *testing.T) {
+	for _, testCase := range stringNamedConsumerTestCaseSuit {
 		consumer := PositionalConsumer{}
 		args := testCase.args
 		expectedConsumed := testCase.expectedConsumed
