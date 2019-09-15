@@ -1,17 +1,17 @@
-package parsers
+package marshallers
 
 import (
 	"github.com/trpx/minarg/errors"
 	"testing"
 )
 
-type stringParserTestCase struct {
+type stringMarshallerTestCase struct {
 	value             string
 	expectedResult    string
 	expectedErrorCode int
 }
 
-var stringParserTestCaseSuit = []stringParserTestCase{
+var stringMarshallerTestCaseSuit = []stringMarshallerTestCase{
 	{
 		value:          "val",
 		expectedResult: "val",
@@ -22,9 +22,9 @@ var stringParserTestCaseSuit = []stringParserTestCase{
 	},
 }
 
-func TestStringParser(t *testing.T) {
-	for _, testCase := range stringParserTestCaseSuit {
-		parser := StringParser{}
+func TestStringMarshaller(t *testing.T) {
+	for _, testCase := range stringMarshallerTestCaseSuit {
+		marshaller := StringMarshaller{}
 		value := testCase.value
 		expectedResult := testCase.expectedResult
 		expectedErrorCode := testCase.expectedErrorCode
@@ -32,17 +32,17 @@ func TestStringParser(t *testing.T) {
 		var result *string
 		var err errors.ParseError
 
-		result, err = parser.parse(value)
+		result, err = marshaller.Marshall(value)
 
 		if expectedErrorCode != 0 {
 			if err == nil {
 				t.Errorf(
-					"Haven't got expected error when parsing value %#v.",
+					"Haven't got expected error when marshalling value %#v.",
 					value,
 				)
 			} else if expectedErrorCode != err.Code() {
 				t.Errorf(
-					"Got unexpected error '%s' when parsing value %#v, expected another error.",
+					"Got unexpected error '%s' when marshalling value %#v, expected another error.",
 					err, value,
 				)
 			}
@@ -51,7 +51,7 @@ func TestStringParser(t *testing.T) {
 
 		if err != nil {
 			t.Errorf(
-				"Got unexpected error '%s' when parsing value %#v, expected no error",
+				"Got unexpected error '%s' when marshalling value %#v, expected no error",
 				err, value,
 			)
 			continue
@@ -60,7 +60,7 @@ func TestStringParser(t *testing.T) {
 		if result != nil {
 			if *result != expectedResult {
 				t.Errorf(
-					"Expected '%s', got '%s' as a result of parsing value %#v",
+					"Expected '%s', got '%s' as a result of marshalling value %#v",
 					expectedResult, *result, value,
 				)
 			}

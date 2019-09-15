@@ -1,17 +1,17 @@
-package parsers
+package marshallers
 
 import (
 	"github.com/trpx/minarg/errors"
 	"testing"
 )
 
-type intParserTestCase struct {
+type intMarshallerTestCase struct {
 	value             string
 	expectedResult    int
 	expectedErrorCode int
 }
 
-var intParserTestCaseSuit = []intParserTestCase{
+var intMarshallerTestCaseSuit = []intMarshallerTestCase{
 	{
 		value:          "123",
 		expectedResult: 123,
@@ -22,9 +22,9 @@ var intParserTestCaseSuit = []intParserTestCase{
 	},
 }
 
-func TestIntParser(t *testing.T) {
-	for _, testCase := range intParserTestCaseSuit {
-		parser := IntParser{}
+func TestIntMarshaller(t *testing.T) {
+	for _, testCase := range intMarshallerTestCaseSuit {
+		marshaller := IntMarshaller{}
 		value := testCase.value
 		expectedResult := testCase.expectedResult
 		expectedErrorCode := testCase.expectedErrorCode
@@ -32,17 +32,17 @@ func TestIntParser(t *testing.T) {
 		var result *int
 		var err errors.ParseError
 
-		result, err = parser.parse(value)
+		result, err = marshaller.Marshall(value)
 
 		if expectedErrorCode != 0 {
 			if err == nil {
 				t.Errorf(
-					"Haven't got expected error when parsing value %#v.",
+					"Haven't got expected error when marshalling value %#v.",
 					value,
 				)
 			} else if expectedErrorCode != err.Code() {
 				t.Errorf(
-					"Got unexpected error '%s' when parsing value %#v, expected another error.",
+					"Got unexpected error '%s' when marshalling value %#v, expected another error.",
 					err, value,
 				)
 			}
@@ -51,7 +51,7 @@ func TestIntParser(t *testing.T) {
 
 		if err != nil {
 			t.Errorf(
-				"Got unexpected error '%s' when parsing value %#v, expected no error",
+				"Got unexpected error '%s' when marshalling value %#v, expected no error",
 				err, value,
 			)
 			continue
@@ -60,7 +60,7 @@ func TestIntParser(t *testing.T) {
 		if result != nil {
 			if *result != expectedResult {
 				t.Errorf(
-					"Expected %d, got %d as a result of parsing value %#v",
+					"Expected %d, got %d as a result of marshalling value %#v",
 					expectedResult, *result, value,
 				)
 			}
