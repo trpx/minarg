@@ -16,7 +16,7 @@ func (c *StringNamedConsumer) Consume(args []string) (consumed []string, remaind
 	arg := args[0]
 	value := args[1]
 
-	if arg == constants.PREFIX+c.argName {
+	if arg == constants.LONG_PREFIX+c.argName {
 		consumed = append(consumed, value)
 		remainder = args[2:]
 	} else {

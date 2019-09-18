@@ -1,3 +1,4 @@
 package constants
 
-const PREFIX = "--"
+const SHORT_PREFIX = "-"
+const LONG_PREFIX = "--"
